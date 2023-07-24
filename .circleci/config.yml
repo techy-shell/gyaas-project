@@ -127,7 +127,7 @@ jobs:
             npm install
             npm audit fix --audit-level=critical
       - slack/notify:
-          channel: Udacity Project
+          channel: project
           event: fail
           template: basic_fail_1
       - slack/notify:
