@@ -27,16 +27,24 @@
     state: present
 
 - name: "create ~/web"
+  become: true
   ansible.builtin.file:
     path: ~/web
     state: directory
     mode: '0755'
 
-- name: "copy files"
+
+- name: "copy artifact"
+  become: true
   copy:
-    src: index.js
-    dest: ~/web
-    backup: true
+    src: ~/project/artifact.tar.gz
+    dest: /home/ubuntu/web/artifact.tar.gz
+
+- name: "Extract artifact files"
+  become: true
+  shell: |
+    cd /home/ubuntu/web
+    tar -xvf artifact.tar.gz    
 
 - name: "start"
   shell: npm install
