@@ -41,167 +41,165 @@ commands:
 #            fi
 #
 jobs:
-#  build-frontend:
-#    docker:
-#      - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [frontend-build]
-#      - run:
-#          name: Build front-end
-#          command: |
-#            cd frontend
-#            npm install
-#            npm run build
-#      - save_cache:
-#          paths: [frontend/node_modules]
-#          key: frontend-build
-#
-#  build-backend:
-#    docker:
-#     - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [backend-build]
-#      - run:
-#          name: Back-end build
-#          command: |
-#            cd backend
-#            npm install
-#            npm run build
-#      - save_cache:
-#          paths: [backend/node_modules]
-#          key: backend-build
-#
-#  test-frontend:
-#    docker:
-#      - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [frontend-test]
-#      - run :
-#          name: Front-end test
-#          command: |
-#            cd frontend
-#            npm install
-#            npm run test
-#
-#  test-backend:
-#    docker:
-#      - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [backend-test]
-#      - run :
-#          name: Back-end test
-#          command: |
-#            cd backend
-#            npm install
-#            npm run test
-#
-#  scan-frontend:
-#    docker:
-#      - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [frontend-scan]
-#      - run :
-#          name: Front-end scan
-#          command: |
-#            cd frontend
-#            npm install
-#            npm audit fix --audit-level=critical
-#
-#  scan-backend:
-#    docker:
-#      - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [backend-scan]
-#      - run :
-#          name: Back-end scan
-#          command: |
-#            cd backend
-#            npm install
-#            npm audit fix --audit-level=critical
-#
-#  notify:
-#    docker:
-#      - image: 'cimg/base:stable'
-#    steps:
-#      - slack/notify:
-#          event: fail
-#          template: basic_fail_1
-#      - slack/notify:
-#          event: pass
-#          template: success_tagged_deploy_1
-#
-#  deploy-infrastructure:
-#    docker:
-#      - image: amazon/aws-cli
-#    steps:
-#      - checkout
-#      - run: yum install -y tar gzip
-#      - run:
-#          name: Ensure back-end infrastructure exists
-#          command: |
-#            aws cloudformation deploy \
-#              --template-file .circleci/files/backend.yml \
-#              --tags project=udapeople \
-#              --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
-#              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
-#      - run:
-#          name: Ensure front-end infrastructure exist
-#          command: |
-#            aws cloudformation deploy \
-#              --template-file .circleci/files/frontend.yml \
-#              --tags project=your-tag \
-#              --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}\
-#              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
-#      - run:
-#          name: Add back-end ip to ansible inventory
-#          command: |
-#            aws ec2 describe-instances \
-#            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-#            --output text >> inventory
-#      - persist_to_workspace:
-#          root: ~/
-#          paths:
-#            - project/.circleci/ansible/inventory.txt
-#      - destroy-environment
-#
-#  configure-infrastructure:
-#    docker:
-#      - image: python:3.7-alpine3.11
-#    steps:
-#      - checkout
-#      - add_ssh_keys:
-#          fingerprints: [ "6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30" ]
-#      - attach_workspace:
-#          at: ~/
-#      - run:
-#          name: Install Ansible
-#          command: apk add --update ansible
-#      - run:
-#          name: Run Playbook and Configure server
-#          command: |
-#            cd .circleci/ansible \
-#            ansible-playbook -i inventory.txt configure-server.yml
-#      - destroy-environment
+  build-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Build front-end
+          command: |
+            cd frontend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
+
+  build-backend:
+    docker:
+     - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end build
+          command: |
+            cd backend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
+
+  test-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-test]
+      - run :
+          name: Front-end test
+          command: |
+            cd frontend
+            npm install
+            npm run test
+
+  test-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-test]
+      - run :
+          name: Back-end test
+          command: |
+            cd backend
+            npm install
+            npm run test
+
+  scan-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-scan]
+      - run :
+          name: Front-end scan
+          command: |
+            cd frontend
+            npm install
+            npm audit fix --audit-level=critical
+
+  scan-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-scan]
+      - run :
+          name: Back-end scan
+          command: |
+            cd backend
+            npm install
+            npm audit fix --audit-level=critical
+
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: yum install -y tar gzip
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --tags project=udapeople \
+              --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
+      - run:
+          name: Ensure front-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --tags project=your-tag \
+              --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}\
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text >> inventory
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      - destroy-environment
+
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: [ "6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30" ]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install Ansible
+          command: apk add --update ansible
+      - run:
+          name: Run Playbook and Configure server
+          command: |
+            cd .circleci/ansible \
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment
 
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-#      - restore_cache:
-#          keys: [ backend-restore ]
       - run:
           name: Run migrations
           command: |
@@ -319,23 +317,23 @@ jobs:
 workflows:
   send-notification:
     jobs:
-#      - notify:
-#          context: slack-secrets
-#      - build-frontend
-#      - build-backend
-#      - test-frontend:
-#          requires: [build-frontend]
-#      - test-backend:
-#          requires: [build-backend]
-#      - scan-backend:
-#          requires: [build-backend]
-#      - scan-frontend:
-#          requires: [build-frontend]
-#      - deploy-infrastructure:
-#          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-#      - configure-infrastructure:
-#          requires: [deploy-infrastructure]
-       - run-migrations:
+      - notify:
+          context: slack-secrets
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
           requires: [configure-infrastructure]
 #      - deploy-frontend:
 #          requires: [run-migrations]
