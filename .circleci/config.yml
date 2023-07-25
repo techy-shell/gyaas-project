@@ -117,7 +117,6 @@ jobs:
             npm install
             npm audit fix --audit-level=critical 
 
-
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -132,17 +131,16 @@ jobs:
             npm install
             npm audit fix --audit-level=critical
 
-#  notify:
-#    docker:
-#      - image: 'cimg/base:stable'
-#    steps:
-#      - slack/notify:
-#          event: fail
-#          template: basic_fail_1
-#      - slack/notify:
-#          event: pass
-#          template: success_tagged_deploy_1
-        
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
 
   deploy-infrastructure:
     docker:
@@ -158,7 +156,6 @@ jobs:
               --tags project=udapeople \
               --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
-#              exit 1
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -167,14 +164,12 @@ jobs:
               --tags project=your-tag \
               --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}\
               --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7
-#              exit 1
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text >> inventory
-#            exit 1
       - persist_to_workspace:
           root: ~/
           paths:
@@ -316,8 +311,8 @@ jobs:
 workflows:
   send-notification:
     jobs:
-#      - notify:
-#          context: slack-secrets
+      - notify:
+          context: slack-secrets
       - build-frontend
       - build-backend
       - test-frontend:
@@ -330,9 +325,7 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]
+
 #      - configure-infrastructure:
 #          requires: [deploy-infrastructure]
 #      - run-migrations:
