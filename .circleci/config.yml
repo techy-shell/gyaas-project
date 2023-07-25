@@ -186,16 +186,14 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install dependencies
-          command: |
-            # Your code here
-            exit 1
+          name: Install Ansible
+          command: apk add --update ansible
       - run:
-          name: Configure server
+          name: Run Playbook and Configure server
           command: |
-            # Your code here
-            exit 1
-      # Here's where you will add some code to rollback on failure
+            cd .circleci/ansible \
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment
 
 #  run-migrations:
 #    docker:
