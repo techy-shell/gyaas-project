@@ -1,4 +1,43 @@
 ---
+- name: "update yum packages."
+  become: true
+  yum:
+    update_cache: true
+
+- name: "upgrade packages"
+  become: true
+  yum:
+    name: "*"
+    state: latest
+
+- name: "install node dependencies"
+  become: true
+  yum:
+    name:
+      - nodejs
+    state: present
+    update_cache: true
+
+- name: "install pm2"
+  become: true
+  npm:
+    name: pm2
+    global: true
+    production: true
+    state: present
+
+- name: "create ~/web"
+  ansible.builtin.file:
+    path: ~/web
+    state: directory
+    mode: '0755'
+
+- name: "copy files"
+  copy:
+    src: index.js
+    dest: ~/web
+    backup: true
+
 - name: "start"
   shell: npm install
          pm2 stop default
