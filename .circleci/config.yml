@@ -210,7 +210,7 @@ jobs:
           command: |
             if grep -q "has been executed successfully."
             then
-              curl https://kvdb.io/8sEgByGTyBDqimp42L9Htv/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              curl https://kvdb.io/8sEgByGTyBDqimp42L9Htv/migration_${CIRCLE_WORKFLOW_ID:0:7}
             fi
       - destroy-environment
 
