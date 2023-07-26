@@ -242,13 +242,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install tar gzip
+          name: Install dependencies
           command: |
             yum install -y tar gzip
+          #ansible nodejs npm python3 awscli
       - run:
-          name: Install ansible
+          name: Install python3
           command: |
-            yum install -y ansible
+            yum install -y python3
       - run:
           name: Install nodejs
           command: |
@@ -258,13 +259,13 @@ jobs:
           command: |
             yum install -y npm
       - run:
-          name: Install python3
-          command: |
-            yum install -y python3
-      - run:
           name: Install awscli
           command: |
             yum install -y awscli
+      - run:
+          name: Install ansible
+          command: |
+            yum install -y ansible
       - attach_workspace:
             at: ~/
 #      - run:
