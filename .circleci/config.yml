@@ -238,36 +238,42 @@ jobs:
 # deploy-frontend job is failing due to tar utility not being present in image (tar added to install dependencies)
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+#      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - restore_cache:
           keys: [frontend-build]
       - run:
-          name: Install tar gzip
+          name: installing all dependencies at once
           command: |
-            yum install -y tar gzip
-      - run:
-          name: Install python3
-          command: |
-            yum install -y python3
-      - run:
-          name: Install nodejs
-          command: |
-            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
-            yum install -y nodejs npm
+            apk add tar nodejs npm curl ansible 
+            pip install awscli --upgrade
+#      - run:
+#          name: Install tar gzip
+#          command: |
+#            yum install -y tar gzip
+#      - run:
+#          name: Install python3
+#          command: |
+#            yum install -y python3
+#      - run:
+#          name: Install nodejs
+#          command: |
+#            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+#            yum install -y nodejs npm
 #      - run:
 #          name: Install npm
 #          command: |
 #            yum install -y npm
-      - run:
-          name: Install ansible
-          command: |
-            yum install -y ansible
-      - run:
-          name: Install awscli
-          command: |
-            yum install -y awscli      
+#      - run:
+#          name: Install ansible
+#          command: |
+#            yum install -y ansible
+#      - run:
+#          name: Install awscli
+#          command: |
+#            yum install -y awscli
 
 
       - attach_workspace:
