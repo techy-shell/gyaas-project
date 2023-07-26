@@ -17,7 +17,6 @@
     path: /home/ubuntu/web
     state: directory
 
-
 - name: "copy artifact"
   become: true
   copy:
@@ -32,5 +31,8 @@
 
 - name: "start"
   shell: |
-         pm2 stop default
-         pm2 start npm -- start
+    cd /home/ubuntu/web
+    npm install
+    npm audit fix --audit-level=critical
+    pm2 stop default
+    pm2 start npm -- start

@@ -281,19 +281,30 @@ jobs:
 # deploy-backend is not working
   deploy-backend:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
       - add_ssh_keys:
           fingerprints: ["6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30"]
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip ansible nodejs npm
+            apt -y update
+            apt install -y tar gzip curl unzip
+            apt install -y nodejs npm
+            apt install -y software-properties-common
+            apt install -y python3 python3-pip
+            python3 -m pip install --user ansible
+      - run:
+          name: Install aws-cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - restore_cache:
+          keys: [ backend-build ]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Deploy backend
           command: |
