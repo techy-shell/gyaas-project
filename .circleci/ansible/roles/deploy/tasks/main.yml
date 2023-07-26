@@ -1,9 +1,9 @@
 ---
-#- name: "upgrade packages"
-#  become: true
-#  yum:
-#    name: "*"
-#    state: latest
+- name: "upgrade packages"
+  become: true
+  yum:
+    name: "*"
+    state: latest
 
 - name: "install node dependencies"
   become: true
