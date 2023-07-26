@@ -15,6 +15,7 @@
   yum:
     name:
       - nodejs
+      - npm
     state: present
     update_cache: true
 
