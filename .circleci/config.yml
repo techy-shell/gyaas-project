@@ -238,7 +238,7 @@ jobs:
 # deploy-frontend job is failing due to tar utility not being present in image (tar added to install dependencies)
   deploy-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: amazon/aws-cli
     steps:
       - checkout
       - restore_cache:
@@ -256,17 +256,18 @@ jobs:
           command: |
             yum install -y awscli
       - run:
-          name: Install ansible
-          command: |
-            yum install -y ansible
-      - run:
           name: Install nodejs
           command: |
+            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
             yum install -y nodejs
       - run:
           name: Install npm
           command: |
             yum install -y npm
+      - run:
+          name: Install ansible
+          command: |
+            yum install -y ansible      
 
 
       - attach_workspace:
@@ -286,7 +287,7 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm audit fix
+            npm audit fix --audit-level-critical
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
