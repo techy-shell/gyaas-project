@@ -312,13 +312,16 @@ jobs:
 # smoke-test has not been tried yet
   smoke-test:
     docker:
-      - image: alpine:latest
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            apk add --update curl nodejs npm awscli
+            apk add --update curl nodejs npm 
+            pip install awscli
       - run:
           name: Get backend url
           command: |
