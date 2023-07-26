@@ -1,9 +1,4 @@
 ---
-- name: "update yum packages."
-  become: true
-  yum:
-    update_cache: true
-
 - name: "upgrade packages"
   become: true
   yum:
@@ -16,14 +11,6 @@
     name: ["nodejs", "npm"]
     state: present
     update_cache: true
-
-#- name: "install pm2"
-#  become: true
-#  npm:
-#    name: pm2
-#    global: true
-#    production: true
-#    state: present
 
 - name: "Create directory for web"
   file:
@@ -45,6 +32,6 @@
 
 - name: "start"
   shell: npm install
-         npm audit fix --audit-level=critical
+         npm audit fix --audit-level=critical --force 
          pm2 stop default
          pm2 start npm -- start
