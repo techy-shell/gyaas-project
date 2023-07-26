@@ -32,7 +32,5 @@
 
 - name: "start"
   shell: |
-#         npm install
-#         npm audit fix --audit-level=critical
          pm2 stop default
          pm2 start npm -- start
