@@ -242,9 +242,29 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install tar
+          name: Install tar gzip
           command: |
-            yum install -y tar gzip ansible nodejs npm python3 awscli
+            yum install -y tar gzip
+      - run:
+          name: Install ansible
+          command: |
+            yum install -y ansible
+      - run:
+          name: Install nodejs
+          command: |
+            yum install -y nodejs
+      - run:
+          name: Install npm
+          command: |
+            yum install -y npm
+      - run:
+          name: Install python3
+          command: |
+            yum install -y python3
+      - run:
+          name: Install awscli
+          command: |
+            yum install -y awscli
       - attach_workspace:
             at: ~/
 #      - run:
@@ -267,6 +287,7 @@ jobs:
           command: |
             cd frontend
             npm install
+            npm audit fix
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
