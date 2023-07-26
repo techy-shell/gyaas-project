@@ -17,13 +17,13 @@
     state: present
     update_cache: true
 
-- name: "install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: true
-    production: true
-    state: present
+#- name: "install pm2"
+#  become: true
+#  npm:
+#    name: pm2
+#    global: true
+#    production: true
+#    state: present
 
 - name: "create ~/web"
   become: true
