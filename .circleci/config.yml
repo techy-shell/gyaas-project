@@ -18,6 +18,11 @@ commands:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     steps:
       - run:
+          name: Destroy S3 bucket
+          when: on_fail
+          command: |
+            aws s3 rm --recursive s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}
+      - run:
           name: Destroy frontend stack
           when: on_fail
           command: |
@@ -27,11 +32,7 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
-#      - run:
-#          name: Destroy S3 bucket
-#          when: on_fail
-#          command: |
-#            aws s3 rm --recursive s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}
+
 
 #  revert-migrations:
 #    description: Revert the last migration if successfully run in the current workflow.
