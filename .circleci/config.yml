@@ -244,8 +244,7 @@ jobs:
       - run:
           name: Install tar
           command: |
-            yum install -y tar gzip ansible nodejs npm python3
-            pip install awscli
+            yum install -y tar gzip ansible nodejs npm python3 awscli
       - attach_workspace:
             at: ~/
 #      - run:
