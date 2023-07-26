@@ -12,6 +12,25 @@
     state: present
     update_cache: true
 
+- name: "install n"
+  become: yes
+  npm:
+    name: n
+    global: yes
+    production: yes
+
+- name: "install nodejs 13.8.0"
+  become: yes
+  shell: n 13.8.0
+
+- name: "install pm2"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
+
 - name: "Create directory for web"
   file:
     path: /home/ubuntu/web
