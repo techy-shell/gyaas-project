@@ -155,7 +155,7 @@ jobs:
           event: pass
           template: success_tagged_deploy_1
 
-# deploy-infrastruture job is working
+# deploy-infrastruture job is working partly - add backend IP is not working
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -184,123 +184,123 @@ jobs:
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text >> ~/project/.circleci/ansible/inventory.txt
-            cat inventory.txt
+            cat ~/project/.circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
 
-## configure-infrastructure job is working
-#  configure-infrastructure:
-#    docker:
-#      - image: python:3.7-alpine3.11
-#    steps:
-#      - checkout
-#      - add_ssh_keys:
-#          fingerprints: [ "6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30" ]
-#      - attach_workspace:
-#          at: ~/
-#      - run:
-#          name: Install Ansible
-#          command: apk add --update ansible
-#      - run:
-#          name: Run Playbook and Configure server
-#          command: |
-#            cd .circleci/ansible \
-#            ansible-playbook -i inventory.txt configure-server.yml
-#      - destroy-environment
-#
-## run-migrations job is working
-#  run-migrations:
-#    docker:
-#      - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - run:
-#          name: Run migrations
-#          command: |
-#            cd backend
-#            npm install
-#            npm run build
-#            npm run migrations > migrations_dump.txt
-#      - run:
-#          name: Send migration results to kvdb.io
-#          command: |
-#            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-#            then
-#              echo "insecure" >> ~/.curlrc
-#              curl https://kvdb.io/8sEgByGTyBDqimp42L9Htv/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
-#              curl https://kvdb.io/8sEgByGTyBDqimp42L9Htv/migration_${CIRCLE_WORKFLOW_ID:0:7}
-#            fi
-#      - destroy-environment
-#
-## deploy-frontend job is failing due to tar utility not being present in image (tar added to install dependencies)
-#  deploy-frontend:
-#    docker:
-#      - image: amazon/aws-cli
-#    steps:
-#      - checkout
-#      - attach_workspace:
-#            at: ~/
-#      - run:
-#          name: Install tar utility
-#          command: |
-#            yum install -y tar gzip
-#      - run:
-#          name: Install dependencies
-#          command: |
-#            apk add --update python3 ansible nodejs npm
-#            pip install awscli
-#      - run:
-#          name: Get backend url
-#          command: |
-#            export BACKEND_IP=$(aws ec2 describe-instances \
-#            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-#            --output text)
-#            export API_URL="http://${BACKEND_IP}:3030"
-#            echo "API_URL = ${API_URL}"
-#            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
-#            cat frontend/.env
-#      - run:
-#          name: Deploy frontend objects
-#          command: |
-#            cd frontend
-#            npm install
-#            npm run build
-#            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-#            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-#      - destroy-environment
-##      - revert-migration
-#
-## deploy-backend is working but is missing ./dist section in roles/deploy/main.yml
-#  deploy-backend:
-#    docker:
-#      - image: python:3.7-alpine3.11
-#    steps:
-#      - checkout
-#      - add_ssh_keys:
-#          fingerprints: ["6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30"]
-#      - attach_workspace:
-#          at: ~/
-#      - run:
-#          name: Install dependencies
-#          command: |
-#            apk add --update tar gzip ansible nodejs npm
-#      - run:
-#          name: Deploy backend
-#          command: |
-#            cd backend
-#            npm i
-#            npm run build
-#            cd ..
-#            tar -C backend -czvf artifact.tar.gz .
-#            cd .circleci/ansible
-#            echo "Contents  of the inventory.txt file is -------"
-#            cat inventory.txt
-#            ansible-playbook -i inventory.txt deploy-backend.yml
-#      - destroy-environment
+# configure-infrastructure job is working
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: [ "6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30" ]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install Ansible
+          command: apk add --update ansible
+      - run:
+          name: Run Playbook and Configure server
+          command: |
+            cd .circleci/ansible \
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment
+
+# run-migrations job is working
+  run-migrations:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Run migrations
+          command: |
+            cd backend
+            npm install
+            npm run build
+            npm run migrations > migrations_dump.txt
+      - run:
+          name: Send migration results to kvdb.io
+          command: |
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then
+              echo "insecure" >> ~/.curlrc
+              curl https://kvdb.io/8sEgByGTyBDqimp42L9Htv/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
+              curl https://kvdb.io/8sEgByGTyBDqimp42L9Htv/migration_${CIRCLE_WORKFLOW_ID:0:7}
+            fi
+      - destroy-environment
+
+# deploy-frontend job is failing due to tar utility not being present in image (tar added to install dependencies)
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+            at: ~/
+      - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update python3 ansible nodejs npm
+            pip install awscli
+      - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP=$(aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - destroy-environment
 #      - revert-migration
+
+# deploy-backend is working but is missing ./dist section in roles/deploy/main.yml
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update tar gzip ansible nodejs npm
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      - destroy-environment
+      - revert-migration
 
 
 #  smoke-test:
