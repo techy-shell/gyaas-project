@@ -244,35 +244,29 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum install -y tar gzip
-          #ansible nodejs npm python3 awscli
-      - run:
-          name: Install python3
-          command: |
-            yum install -y python3
-      - run:
-          name: Install nodejs
-          command: |
-            yum install -y nodejs
-      - run:
-          name: Install npm
-          command: |
-            yum install -y npm
-      - run:
-          name: Install awscli
-          command: |
-            yum install -y awscli
-      - run:
-          name: Install ansible
-          command: |
-            yum install -y ansible
+            yum install -y tar gzip ansible nodejs npm python3 awscli
+#      - run:
+#          name: Install python3
+#          command: |
+#            yum install -y python3
+#      - run:
+#          name: Install nodejs
+#          command: |
+#            yum install -y nodejs
+#      - run:
+#          name: Install npm
+#          command: |
+#            yum install -y npm
+#      - run:
+#          name: Install awscli
+#          command: |
+#            yum install -y awscli
+#      - run:
+#          name: Install ansible
+#          command: |
+#            yum install -y ansible
       - attach_workspace:
             at: ~/
-#      - run:
-#          name: Install dependencies
-#          command: |
-#            apk add --update tar gzip ansible nodejs npm
-#            pip install awscli
       - run:
           name: Get backend url
           command: |
