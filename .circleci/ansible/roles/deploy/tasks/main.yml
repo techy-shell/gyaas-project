@@ -13,9 +13,7 @@
 - name: "install node dependencies"
   become: true
   yum:
-    name:
-      - nodejs
-      - npm
+    name: ["nodejs", "npm"]
     state: present
     update_cache: true
 
