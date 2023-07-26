@@ -25,12 +25,10 @@
 #    production: true
 #    state: present
 
-- name: "create ~/web"
-  become: true
-  ansible.builtin.file:
-    path: ~/web
+- name: "Create directory for web"
+  file:
+    path: /home/ubuntu/web
     state: directory
-    mode: '0755'
 
 
 - name: "copy artifact"
