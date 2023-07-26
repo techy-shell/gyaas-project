@@ -278,7 +278,7 @@ jobs:
       - destroy-environment
 #      - revert-migration
 
-# deploy-backend is not working
+# deploy-backend is working
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
