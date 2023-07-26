@@ -241,14 +241,20 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Install dependencies
           command: |
-            yum install -y tar gzip ansible nodejs npm python3 awscli
-#      - run:
-#          name: Install python3
-#          command: |
-#            yum install -y python3
+            yum install -y tar gzip nodejs npm awscli
+      - run:
+          name: Install python3
+          command: |
+            yum install -y python3
+      - run:
+          name: Install ansible
+          command: |
+            yum install -y ansible
 #      - run:
 #          name: Install nodejs
 #          command: |
@@ -261,10 +267,7 @@ jobs:
 #          name: Install awscli
 #          command: |
 #            yum install -y awscli
-#      - run:
-#          name: Install ansible
-#          command: |
-#            yum install -y ansible
+
       - attach_workspace:
             at: ~/
       - run:
@@ -295,6 +298,8 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - add_ssh_keys:
           fingerprints: ["6e:27:21:93:ad:e1:7b:2a:5b:4f:7d:3e:89:bb:da:30"]
       - attach_workspace:
@@ -313,8 +318,8 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            cat ~/project/.circleci/ansible/inventory.txt
+            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt deploy-backend.yml
       - destroy-environment
 #      - revert-migration
 
