@@ -309,7 +309,7 @@ jobs:
       - destroy-environment
 #      - revert-migration
 
-# smoke-test has not been tried yet
+# smoke-test is not working
   smoke-test:
     docker:
       - image: python:3.7-alpine3.11
