@@ -252,10 +252,6 @@ jobs:
           command: |
             yum install -y python3
       - run:
-          name: Install awscli
-          command: |
-            yum install -y awscli
-      - run:
           name: Install nodejs
           command: |
             curl -sL https://rpm.nodesource.com/setup_10.x | bash -
@@ -267,7 +263,11 @@ jobs:
       - run:
           name: Install ansible
           command: |
-            yum install -y ansible      
+            yum install -y ansible
+      - run:
+          name: Install awscli
+          command: |
+            yum install -y awscli      
 
 
       - attach_workspace:
