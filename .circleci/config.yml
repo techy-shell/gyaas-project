@@ -255,11 +255,11 @@ jobs:
           name: Install nodejs
           command: |
             curl -sL https://rpm.nodesource.com/setup_10.x | bash -
-            yum install -y nodejs
-      - run:
-          name: Install npm
-          command: |
-            yum install -y npm
+            yum install -y nodejs npm
+#      - run:
+#          name: Install npm
+#          command: |
+#            yum install -y npm
       - run:
           name: Install ansible
           command: |
