@@ -33,7 +33,6 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
 
-
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     steps:
@@ -276,7 +275,7 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment
-      - revert-migration
+#      - revert-migration
 
 # deploy-backend is working
   deploy-backend:
@@ -307,7 +306,7 @@ jobs:
             cat ~/project/.circleci/ansible/inventory.txt
             ansible-playbook -i ~/project/.circleci/ansible/inventory.txt deploy-backend.yml
       - destroy-environment
-      - revert-migration
+#      - revert-migration
 
 # smoke-test is not working
   smoke-test:
