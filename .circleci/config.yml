@@ -35,6 +35,9 @@ commands:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      workflow_id:
+        type: string
     steps:
       - run:
           name: Revert migrations
@@ -349,6 +352,7 @@ jobs:
             fi
       - destroy-environment
       - revert-migration
+
 #  cloudfront-update:
 #    docker:
 #      - image: amazon/aws-cli
@@ -367,7 +371,7 @@ jobs:
 #            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
 #            --tags project=udapeople
 #      - destroy-environment
-##      - revert-migration
+#     - revert-migration
 #
 #
 #cleanup:
@@ -402,7 +406,7 @@ jobs:
 #            fi
 
 workflows:
-  deploy:
+  Rollback:
     jobs:
       - notify:
           context: slack-secrets
