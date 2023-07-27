@@ -403,7 +403,7 @@ cleanup:
             fi
 
 workflows:
-  Rollback:
+  Cleanup:
     jobs:
       - notify:
           context: slack-secrets
