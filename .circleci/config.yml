@@ -370,7 +370,6 @@ jobs:
       - destroy-environment
       - revert-migrations
 
-
   cleanup:
       docker:
         - image: amazon/aws-cli
@@ -414,6 +413,8 @@ jobs:
               else
                 echo 'Unable to clean up'
               fi
+        - destroy-environment
+        - revert-migrations
 
 workflows:
   cleanup:
