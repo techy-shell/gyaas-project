@@ -42,7 +42,7 @@ commands:
           command: |
             SUCCESS=$(echo "insecure" >> ~/.curlrc
             curl -- insecure https://kvdb.io/8sEgByGTyBDqimp42L9Htv/migration_${CIRCLE_WORKFLOW_ID:0:7})
-            if(( $SUCCESS==1 ));
+            if [[ "${SUCCESS}" == "1" ]];
             then
               cd ~/project/backend
               npm install
@@ -259,13 +259,15 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text)
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "API_URL = ${API_URL}"
-            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
-            cat frontend/.env
+            exit 1
+
+#            export BACKEND_IP=$(aws ec2 describe-instances \
+#            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+#            --output text)
+#            export API_URL="http://${BACKEND_IP}:3030"
+#            echo "API_URL = ${API_URL}"
+#            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+#            cat frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
@@ -351,7 +353,6 @@ jobs:
       - destroy-environment
       - revert-migrations
 
-
   cloudfront-update:
     docker:
       - image: amazon/aws-cli
@@ -396,25 +397,6 @@ jobs:
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               echo 'Cleanup buckets successful'
-              else
-                echo 'Unable to clean up'
-              fi
-        - run:
-            name: Cleanup stacks
-            command: |
-              export OldWorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text)
-              echo OldWorkflowID: "${OldWorkflowID}"
-              echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-              export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-              --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
-              echo Stack names: "${STACKS[@]}"
-              if [[ "udapeople-${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
-              then
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-              echo 'Cleanup stacks successful'
               else
                 echo 'Unable to clean up'
               fi
