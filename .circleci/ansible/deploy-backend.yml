@@ -10,7 +10,7 @@
     - ansible_stdout_callback: yaml
   roles:
     - deploy
-    - configure-prometheus-node-exporter
+#    - configure-prometheus-node-exporter
   environment:
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
     - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
