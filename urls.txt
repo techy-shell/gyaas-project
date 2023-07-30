@@ -1,2 +1,2 @@
 URL01 - GitHub repo - https://github.com/techy-shell/gyaas-project
-URL02 - S3 Bucket - http://udapeople-29ec145.s3-website-us-east-1.amazonaws.com
+URL02 - S3 Bucket - http://udapeople-228d099.s3-website-us-east-1.amazonaws.com/#/employees
