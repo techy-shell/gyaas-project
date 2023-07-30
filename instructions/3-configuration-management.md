@@ -178,7 +178,7 @@ Of course, we all hope every pipeline follows the “happy path.” But any expe
 - No more jobs should run after these commands have executed.
 - Provide a screenshot for a successful rollback after a failed smoke test. **[SCREENSHOT07]**
 
-![Successful rollback job.](screenshots/SCREENSHOT07.png)
+![Successful rollback job.](screenshots/SCREENSHOT07-1/2/3.png)
 
 - Add these rollback commands to other jobs that might fail and need a rollback.
 
