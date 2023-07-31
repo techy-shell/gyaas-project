@@ -5,7 +5,6 @@ orbs:
 
 commands:
 
-# notify_on_success is working
   notify_on_success:
     steps:
       - slack/notify:
@@ -13,7 +12,6 @@ commands:
           channel: $SLACK_DEFAULT_CHANNEL
           template: success_tagged_deploy_1
 
-# destroy-environment is working for all job apart from run-migrations
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     steps:
@@ -51,7 +49,6 @@ commands:
 
 jobs:
 
-# build-frontend job is working
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -69,7 +66,6 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
 
-# build-backend job is working
   build-backend:
     docker:
      - image: circleci/node:13.8.0
@@ -88,7 +84,6 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
 
-# test-frontend job is working
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -103,7 +98,6 @@ jobs:
             npm install
             npm run test
 
-# test-backend job is working
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -118,7 +112,6 @@ jobs:
             npm install
             npm run test
 
-# scan-frontend job is working
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -133,7 +126,6 @@ jobs:
             npm install
             npm audit fix --audit-level=critical
 
-# scan-backend job is working
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -148,7 +140,6 @@ jobs:
             npm install
             npm audit fix --audit-level=critical
 
-# notify job is working
   notify:
     docker:
       - image: 'cimg/base:stable'
@@ -160,7 +151,6 @@ jobs:
           event: pass
           template: success_tagged_deploy_1
 
-# deploy-infrastruture job is working
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -196,7 +186,6 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
 
-# configure-infrastructure job is working
   configure-infrastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -216,7 +205,6 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
 
-# run-migrations job is working
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
@@ -240,10 +228,8 @@ jobs:
             fi
       - destroy-environment
 
-# deploy-frontend is working
   deploy-frontend:
     docker:
-#      - image: amazon/aws-cli
       - image: python:3.7-alpine3.11
     steps:
       - checkout
@@ -278,7 +264,6 @@ jobs:
       - destroy-environment
       - revert-migrations
 
-# deploy-backend is working
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
@@ -309,7 +294,6 @@ jobs:
       - destroy-environment
       - revert-migrations
 
-# smoke-test is not working
   smoke-test:
     docker:
       - image: python:3.7-alpine3.11
